@@ -109,7 +109,8 @@ def get_events(start, end, user=None, for_reminder=False):
 	def add_event(e, date):
 		new_event = e.copy()
 		edate = add_days(date,int(date_diff(e.ends_on.split(" ")[0], e.starts_on.split(" ")[0])))
-		new_event.starts_on = date + " " + e.starts_on.split(" ")[1]
+		new_event.starts_on = date + " " + e.starts_on.split(" ")[1] \
+			if (e.starts_on and e.ends_on) else date
 		if e.ends_on:
 			new_event.ends_on = edate + " " + e.ends_on.split(" ")[1]
 		add_events.append(new_event)
@@ -129,7 +130,7 @@ def get_events(start, end, user=None, for_reminder=False):
 				# repeat for all years in period
 				for year in range(start_year, end_year+1):
 					date = str(year) + "-" + event_start
-					if date >= start and date <= repeat:
+					if date >= start and date <= end and date <= repeat:
 						add_event(e, date)
 
 				remove_events.append(e)
